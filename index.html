@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diopter Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: #ffffff;
+            border-radius: 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            width: 100%;
+            padding: 40px;
+            animation: fadeIn 0.5s ease-in;
+            border: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #dc143c;
+            margin-bottom: 5px;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666666;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            color: #000000;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .diopter-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .diopter-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #cccccc;
+            background: #ffffff;
+            border-radius: 0;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #000000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            text-transform: uppercase;
+        }
+
+        .diopter-btn:hover {
+            border-color: #dc143c;
+            background: #fafafa;
+            transform: translateY(-1px);
+        }
+
+        .diopter-btn.active {
+            background: #dc143c;
+            color: #ffffff;
+            border-color: #dc143c;
+            box-shadow: none;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #cccccc;
+            background: #ffffff;
+            color: #000000;
+            border-radius: 0;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-weight: 400;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        input[type="number"]::placeholder,
+        input[type="text"]::placeholder {
+            color: #999;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #dc143c;
+            background: #ffffff;
+            box-shadow: 0 0 0 2px rgba(220, 20, 60, 0.2);
+        }
+
+        #originalMinFocus:focus {
+            border-color: #dc143c;
+            box-shadow: 0 0 0 2px rgba(220, 20, 60, 0.2);
+        }
+
+        .unit {
+            color: #666666;
+            font-size: 0.8em;
+            margin-top: 4px;
+            display: block;
+            text-transform: uppercase;
+        }
+
+        .unit-toggle {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .unit-btn {
+            padding: 6px 12px;
+            border: 2px solid #cccccc;
+            background: #ffffff;
+            border-radius: 0;
+            font-size: 0.8em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #000000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            text-transform: uppercase;
+        }
+
+        .unit-btn:hover {
+            border-color: #dc143c;
+            background: #fafafa;
+        }
+
+        .unit-btn.active {
+            background: #dc143c;
+            color: #ffffff;
+            border-color: #dc143c;
+            box-shadow: none;
+        }
+
+        .dual-unit {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .unit-primary {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #000000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .unit-secondary {
+            color: #666666;
+            font-size: 0.85em;
+            font-weight: normal;
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 25px;
+            background: #ffffff;
+            border-radius: 0;
+            border: 2px solid #e0e0e0;
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .results h2 {
+            color: #dc143c;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .result-card {
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 0;
+            border: 2px solid #e0e0e0;
+            box-shadow: none;
+        }
+
+        .result-label {
+            color: #666666;
+            font-size: 0.75em;
+            margin-bottom: 8px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .result-value {
+            color: #000000;
+            font-size: 1.8em;
+            font-weight: 700;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .comparison {
+            margin-top: 20px;
+            padding: 15px;
+            background: #ffffff;
+            border-radius: 0;
+            border: 2px solid #e0e0e0;
+            border-left: 4px solid #dc143c;
+        }
+
+        .comparison-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-label {
+            color: #666666;
+            font-weight: 500;
+            font-size: 0.85em;
+            text-transform: uppercase;
+        }
+
+        .comparison-value {
+            color: #000000;
+            font-weight: 700;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* Lens Scale Styles */
+        .lens-scale-container {
+            margin-top: 25px;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 0;
+            border: 2px solid #e0e0e0;
+            position: relative;
+        }
+
+        .lens-scale-title {
+            color: #dc143c;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .lens-scale {
+            position: relative;
+            height: 80px;
+            background: linear-gradient(to bottom, #f5f5f5 0%, #ffffff 50%, #f5f5f5 100%);
+            border: 2px solid #cccccc;
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .lens-scale-barrel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 49px,
+                rgba(220, 20, 60, 0.1) 49px,
+                rgba(220, 20, 60, 0.1) 50px
+            );
+        }
+
+        .lens-scale-markings {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .scale-mark {
+            position: absolute;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-bottom: 5px;
+        }
+
+        .scale-mark-line {
+            width: 2px;
+            background: #dc143c;
+            margin-bottom: 2px;
+        }
+
+        .scale-mark-line.major {
+            height: 20px;
+            background: #dc143c;
+        }
+
+        .scale-mark-line.minor {
+            height: 10px;
+            background: rgba(220, 20, 60, 0.6);
+        }
+
+        .scale-mark-label {
+            color: #000000;
+            font-size: 0.7em;
+            font-weight: 700;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            white-space: nowrap;
+            transform: translateX(-50%);
+        }
+
+        .scale-range {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 30px;
+            background: rgba(220, 20, 60, 0.15);
+            border: 2px solid #dc143c;
+            border-left: none;
+            border-right: none;
+            transition: all 0.5s ease;
+            z-index: 10;
+        }
+
+        .scale-range::before,
+        .scale-range::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border: 8px solid transparent;
+        }
+
+        .scale-range::before {
+            left: -8px;
+            border-right-color: #dc143c;
+        }
+
+        .scale-range::after {
+            right: -8px;
+            border-left-color: #dc143c;
+        }
+
+        .scale-infinity {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #000000;
+            font-size: 1.2em;
+            font-weight: 700;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .scale-values {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            color: #666666;
+            font-size: 0.8em;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .error-message {
+            background: rgba(220, 20, 60, 0.1);
+            color: #dc143c;
+            padding: 12px;
+            border-radius: 0;
+            margin-top: 15px;
+            display: none;
+            border: 2px solid #dc143c;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .diopter-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Diopter Calculator</h1>
+        <p class="subtitle">an RTP tool</p>
+
+        <div class="input-section">
+            <div class="input-group">
+                <label>Diopter Strength</label>
+                <div class="diopter-buttons">
+                    <button class="diopter-btn" onclick="setDiopter(0)">+0</button>
+                    <button class="diopter-btn" onclick="setDiopter(1)">+1</button>
+                    <button class="diopter-btn" onclick="setDiopter(2)">+2</button>
+                    <button class="diopter-btn" onclick="setDiopter(3)">+3</button>
+                </div>
+                <input type="number" id="diopter" step="0.1" min="0" placeholder="Or enter custom value" oninput="updateDiopterButtons()">
+                <span class="unit">diopters (+D)</span>
+            </div>
+
+            <div class="input-group">
+                <label>Original Minimum Focus Distance (without diopter)</label>
+                <input type="text" id="originalMinFocus" placeholder="Enter distance (e.g., 1.5m or 1'6&quot;)">
+                <div class="unit-toggle">
+                    <button class="unit-btn active" id="unitMeters" onclick="setInputUnit('meters')">Meters</button>
+                    <button class="unit-btn" id="unitFeet" onclick="setInputUnit('feet')">Feet</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="results" id="results">
+            <h2>Results with Diopter</h2>
+            <div class="result-grid">
+                <div class="result-card">
+                    <div class="result-label">New Minimum Focus</div>
+                    <div class="result-value">
+                        <div class="dual-unit">
+                            <span class="unit-primary" id="resultMinPrimary">-</span>
+                            <span class="unit-secondary" id="resultMinSecondary">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">New Maximum Focus</div>
+                    <div class="result-value">
+                        <div class="dual-unit">
+                            <span class="unit-primary" id="resultMaxPrimary">-</span>
+                            <span class="unit-secondary" id="resultMaxSecondary">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comparison">
+                <div class="comparison-row">
+                    <span class="comparison-label">Original Min Focus:</span>
+                    <span class="comparison-value" id="originalMinDisplay">-</span>
+                </div>
+                <div class="comparison-row">
+                    <span class="comparison-label">New Min Focus:</span>
+                    <span class="comparison-value" id="newMinDisplay">-</span>
+                </div>
+                <div class="comparison-row">
+                    <span class="comparison-label">New Max Focus:</span>
+                    <span class="comparison-value" id="newMaxDisplay">-</span>
+                </div>
+            </div>
+
+            <div class="lens-scale-container">
+                <div class="lens-scale-title">Focus Distance Scale</div>
+                <div class="lens-scale" id="lensScale">
+                    <div class="lens-scale-barrel"></div>
+                    <div class="lens-scale-markings" id="scaleMarkings"></div>
+                    <div class="scale-range" id="scaleRange"></div>
+                    <div class="scale-infinity" id="scaleInfinity">∞</div>
+                </div>
+                <div class="scale-values">
+                    <span id="scaleMinValue">-</span>
+                    <span id="scaleMaxValue">-</span>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        let inputUnit = 'meters';
+        const METERS_TO_FEET = 3.28084;
+        let originalMinFocus = 0;
+        let newMinFocus = 0;
+        let newMaxFocus = 0;
+
+        function metersToFeet(meters) {
+            return meters * METERS_TO_FEET;
+        }
+
+        function feetToMeters(feet) {
+            return feet / METERS_TO_FEET;
+        }
+
+        function formatFeet(feet) {
+            const wholeFeet = Math.floor(feet);
+            const inches = Math.round((feet - wholeFeet) * 12);
+            if (inches === 0) {
+                return `${wholeFeet}'`;
+            }
+            return `${wholeFeet}' ${inches}"`;
+        }
+
+        function parseFeetInches(input) {
+            // Parse formats like: "6"", "1'3"", "1'", "1.5", "1.5ft"
+            const str = input.trim();
+            
+            // Remove 'ft' suffix if present (case insensitive)
+            const cleaned = str.replace(/ft$/i, '').trim();
+            
+            // Check for feet'inches" format (e.g., "1'3"" or "1' 3"")
+            const feetInchesMatch = cleaned.match(/^(\d+(?:\.\d+)?)\s*['\u2019]\s*(\d+(?:\.\d+)?)\s*["\u201d]?$/);
+            if (feetInchesMatch) {
+                const feet = parseFloat(feetInchesMatch[1]) || 0;
+                const inches = parseFloat(feetInchesMatch[2]) || 0;
+                return feet + (inches / 12);
+            }
+            
+            // Check for inches only format (e.g., "6"")
+            const inchesOnlyMatch = cleaned.match(/^(\d+(?:\.\d+)?)\s*["\u201d]$/);
+            if (inchesOnlyMatch) {
+                const inches = parseFloat(inchesOnlyMatch[1]);
+                return inches / 12;
+            }
+            
+            // Check for feet only format (e.g., "1'")
+            const feetOnlyMatch = cleaned.match(/^(\d+(?:\.\d+)?)\s*['\u2019]$/);
+            if (feetOnlyMatch) {
+                return parseFloat(feetOnlyMatch[1]);
+            }
+            
+            // Try parsing as decimal number
+            const decimal = parseFloat(cleaned);
+            if (!isNaN(decimal)) {
+                return decimal;
+            }
+            
+            return null;
+        }
+
+        function setInputUnit(unit) {
+            inputUnit = unit;
+            const metersBtn = document.getElementById('unitMeters');
+            const feetBtn = document.getElementById('unitFeet');
+            
+            if (unit === 'meters') {
+                metersBtn.classList.add('active');
+                feetBtn.classList.remove('active');
+            } else {
+                feetBtn.classList.add('active');
+                metersBtn.classList.remove('active');
+            }
+
+            const currentValueStr = document.getElementById('originalMinFocus').value.trim();
+            let currentValue;
+            
+            if (inputUnit === 'feet') {
+                currentValue = parseFeetInches(currentValueStr);
+                if (currentValue === null) {
+                    currentValue = parseFloat(currentValueStr);
+                }
+            } else {
+                currentValue = parseFloat(currentValueStr);
+            }
+            
+            if (currentValue && currentValue > 0) {
+                let convertedValue;
+                if (unit === 'meters') {
+                    // Convert from feet to meters
+                    if (inputUnit === 'feet') {
+                        convertedValue = feetToMeters(currentValue);
+                    } else {
+                        convertedValue = currentValue;
+                    }
+                    document.getElementById('originalMinFocus').value = convertedValue.toFixed(2);
+                } else {
+                    // Convert from meters to feet
+                    if (inputUnit === 'meters') {
+                        convertedValue = metersToFeet(currentValue);
+                    } else {
+                        convertedValue = currentValue;
+                    }
+                    // Format as feet'inches" if it has fractional feet
+                    const wholeFeet = Math.floor(convertedValue);
+                    const inches = Math.round((convertedValue - wholeFeet) * 12);
+                    if (inches === 0) {
+                        document.getElementById('originalMinFocus').value = `${wholeFeet}'`;
+                    } else {
+                        document.getElementById('originalMinFocus').value = `${wholeFeet}'${inches}"`;
+                    }
+                }
+            }
+            
+            calculate();
+        }
+
+        function setDiopter(value) {
+            document.getElementById('diopter').value = value;
+            updateDiopterButtons();
+            calculate();
+        }
+
+        function updateDiopterButtons() {
+            const diopterValue = parseFloat(document.getElementById('diopter').value);
+            document.querySelectorAll('.diopter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (parseFloat(btn.textContent.replace('+', '')) === diopterValue) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+            setTimeout(() => errorEl.classList.remove('show'), 5000);
+        }
+
+        function updateLensScale() {
+            const scaleElement = document.getElementById('lensScale');
+            const rangeElement = document.getElementById('scaleRange');
+            const markingsElement = document.getElementById('scaleMarkings');
+            const infinityElement = document.getElementById('scaleInfinity');
+            const scaleWidth = scaleElement.offsetWidth - 20;
+            
+            if (!originalMinFocus) {
+                rangeElement.style.display = 'none';
+                infinityElement.style.display = 'block';
+                markingsElement.innerHTML = '';
+                return;
+            }
+
+            // Lens focus scales compress as they approach infinity
+            // Use inverse mapping: position = scaleWidth * (1 - 1/distance_normalized)
+            // This creates the characteristic compression near infinity
+            function distanceToPosition(distance) {
+                // Map distance to position where minFocus = 0, infinity = scaleWidth
+                // Use inverse relationship: closer distances take more space, infinity compresses
+                const minInverse = 1 / originalMinFocus;
+                const maxInverse = 0; // Infinity = 0 inverse
+                const distanceInverse = 1 / distance;
+                // Normalize: 0 at infinity, 1 at minFocus
+                const normalized = (distanceInverse - maxInverse) / (minInverse - maxInverse);
+                // Invert so minFocus is at 0, infinity is at scaleWidth
+                return (1 - normalized) * scaleWidth;
+            }
+
+            // Calculate positions for new focus range
+            let minPos, maxPos;
+            if (newMinFocus && (newMaxFocus || newMaxFocus === Infinity)) {
+                minPos = distanceToPosition(Math.max(newMinFocus, originalMinFocus));
+                
+                // Handle infinity (diopter = 0, original lens range)
+                if (newMaxFocus === Infinity || !isFinite(newMaxFocus)) {
+                    // Range goes from minFocus to infinity (end of scale)
+                    maxPos = scaleWidth;
+                } else {
+                    // For maxFocus approaching infinity, use a large value
+                    const maxFocusForScale = Math.min(newMaxFocus, originalMinFocus * 50);
+                    maxPos = distanceToPosition(maxFocusForScale);
+                }
+                
+                // Update range indicator
+                rangeElement.style.left = `${minPos + 10}px`;
+                rangeElement.style.width = `${Math.max(maxPos - minPos, 5)}px`;
+                rangeElement.style.display = 'block';
+            } else {
+                rangeElement.style.display = 'none';
+            }
+            
+            // Always show infinity at the right end
+            infinityElement.style.display = 'block';
+
+            // Create scale markings - compress as approaching infinity
+            // Typical lens scale: min, then 2x, 3x, 5x, 10x, then infinity
+            markingsElement.innerHTML = '';
+            
+            // Generate realistic lens scale distances
+            const scaleDistances = [];
+            scaleDistances.push(originalMinFocus);
+            
+            // Add intermediate distances that compress
+            let currentDist = originalMinFocus;
+            const multipliers = [1.5, 2, 3, 5, 10, 20, 50];
+            for (const mult of multipliers) {
+                const dist = originalMinFocus * mult;
+                if (dist <= originalMinFocus * 50) {
+                    scaleDistances.push(dist);
+                }
+            }
+            
+            // Create marks for each distance
+            scaleDistances.forEach((distance, index) => {
+                const position = distanceToPosition(distance);
+                
+                const mark = document.createElement('div');
+                mark.className = 'scale-mark';
+                mark.style.left = `${position}px`;
+                
+                const line = document.createElement('div');
+                // Major marks for key distances, minor for others
+                const isMajor = index === 0 || index === scaleDistances.length - 1 || 
+                               (index % 2 === 0 && distance <= originalMinFocus * 10);
+                line.className = 'scale-mark-line ' + (isMajor ? 'major' : 'minor');
+                mark.appendChild(line);
+                
+                // Show labels for major marks
+                if (isMajor) {
+                    const label = document.createElement('div');
+                    label.className = 'scale-mark-label';
+                    if (inputUnit === 'feet') {
+                        label.textContent = formatFeet(metersToFeet(distance));
+                    } else {
+                        if (distance < 1) {
+                            label.textContent = (distance * 100).toFixed(0) + 'cm';
+                        } else if (distance < 10) {
+                            label.textContent = distance.toFixed(2) + 'm';
+                        } else {
+                            label.textContent = distance.toFixed(1) + 'm';
+                        }
+                    }
+                    mark.appendChild(label);
+                }
+                
+                markingsElement.appendChild(mark);
+            });
+            
+            // Add original min focus label at the start
+            const startMark = document.createElement('div');
+            startMark.className = 'scale-mark';
+            startMark.style.left = '0px';
+            const startLabel = document.createElement('div');
+            startLabel.className = 'scale-mark-label';
+            startLabel.style.position = 'absolute';
+            startLabel.style.bottom = '-18px';
+            if (inputUnit === 'feet') {
+                startLabel.textContent = formatFeet(metersToFeet(originalMinFocus));
+            } else {
+                if (originalMinFocus < 1) {
+                    startLabel.textContent = (originalMinFocus * 100).toFixed(0) + 'cm';
+                } else {
+                    startLabel.textContent = originalMinFocus.toFixed(2) + 'm';
+                }
+            }
+            startMark.appendChild(startLabel);
+            markingsElement.appendChild(startMark);
+        }
+
+        function calculate() {
+            const diopter = parseFloat(document.getElementById('diopter').value);
+            const originalMinFocusInputStr = document.getElementById('originalMinFocus').value.trim();
+            
+            let originalMinFocusInput;
+            
+            // Parse input based on unit
+            if (inputUnit === 'feet') {
+                // Try parsing as feet/inches format first
+                originalMinFocusInput = parseFeetInches(originalMinFocusInputStr);
+                if (originalMinFocusInput === null) {
+                    // Fall back to regular number parsing
+                    originalMinFocusInput = parseFloat(originalMinFocusInputStr);
+                }
+            } else {
+                // For meters, parse as regular number
+                originalMinFocusInput = parseFloat(originalMinFocusInputStr);
+            }
+
+            // Always update originalMinFocus if entered
+            if (originalMinFocusInput && originalMinFocusInput > 0) {
+                if (inputUnit === 'feet') {
+                    originalMinFocus = feetToMeters(originalMinFocusInput);
+                } else {
+                    originalMinFocus = originalMinFocusInput;
+                }
+                
+                // Show scale even without diopter
+                setTimeout(updateLensScale, 100);
+            }
+
+            if (diopter === null || diopter === undefined || isNaN(diopter) || diopter < 0) {
+                document.getElementById('results').classList.remove('show');
+                return;
+            }
+
+            if (!originalMinFocusInput || originalMinFocusInput <= 0) {
+                document.getElementById('results').classList.remove('show');
+                return;
+            }
+
+            // Handle diopter = 0 (no diopter, show original range)
+            if (diopter === 0) {
+                newMinFocus = originalMinFocus;
+                newMaxFocus = Infinity; // Original lens focuses to infinity
+            } else {
+                newMinFocus = originalMinFocus / (1 + diopter * originalMinFocus);
+                newMaxFocus = 1 / diopter;
+            }
+
+            const newMinFocusFeet = metersToFeet(newMinFocus);
+            const newMaxFocusFeet = diopter === 0 ? Infinity : metersToFeet(newMaxFocus);
+            const originalMinFocusFeet = metersToFeet(originalMinFocus);
+
+            if (inputUnit === 'feet') {
+                document.getElementById('resultMinPrimary').textContent = formatFeet(newMinFocusFeet);
+                document.getElementById('resultMinSecondary').textContent = `${newMinFocus.toFixed(3)} m`;
+                if (diopter === 0) {
+                    document.getElementById('resultMaxPrimary').textContent = '∞';
+                    document.getElementById('resultMaxSecondary').textContent = '';
+                } else {
+                    document.getElementById('resultMaxPrimary').textContent = formatFeet(newMaxFocusFeet);
+                    document.getElementById('resultMaxSecondary').textContent = `${newMaxFocus.toFixed(3)} m`;
+                }
+            } else {
+                document.getElementById('resultMinPrimary').textContent = `${newMinFocus.toFixed(3)} m`;
+                document.getElementById('resultMinSecondary').textContent = formatFeet(newMinFocusFeet);
+                if (diopter === 0) {
+                    document.getElementById('resultMaxPrimary').textContent = '∞';
+                    document.getElementById('resultMaxSecondary').textContent = '';
+                } else {
+                    document.getElementById('resultMaxPrimary').textContent = `${newMaxFocus.toFixed(3)} m`;
+                    document.getElementById('resultMaxSecondary').textContent = formatFeet(newMaxFocusFeet);
+                }
+            }
+
+            const originalMinPrimary = inputUnit === 'feet' 
+                ? `${metersToFeet(originalMinFocus).toFixed(2)} ft`
+                : `${originalMinFocus.toFixed(3)} m`;
+            const originalMinSecondary = inputUnit === 'feet'
+                ? `(${originalMinFocus.toFixed(3)} m)`
+                : `(${formatFeet(originalMinFocusFeet)})`;
+            
+            const newMinPrimary = inputUnit === 'feet'
+                ? formatFeet(newMinFocusFeet)
+                : `${newMinFocus.toFixed(3)} m`;
+            const newMinSecondary = inputUnit === 'feet'
+                ? `(${newMinFocus.toFixed(3)} m)`
+                : `(${formatFeet(newMinFocusFeet)})`;
+            
+            let newMaxPrimary, newMaxSecondary;
+            if (diopter === 0) {
+                newMaxPrimary = '∞';
+                newMaxSecondary = '';
+            } else {
+                newMaxPrimary = inputUnit === 'feet'
+                    ? formatFeet(newMaxFocusFeet)
+                    : `${newMaxFocus.toFixed(3)} m`;
+                newMaxSecondary = inputUnit === 'feet'
+                    ? `(${newMaxFocus.toFixed(3)} m)`
+                    : `(${formatFeet(newMaxFocusFeet)})`;
+            }
+            
+            document.getElementById('originalMinDisplay').textContent = `${originalMinPrimary} ${originalMinSecondary}`;
+            document.getElementById('newMinDisplay').textContent = `${newMinPrimary} ${newMinSecondary}`;
+            document.getElementById('newMaxDisplay').textContent = `${newMaxPrimary} ${newMaxSecondary}`;
+
+            // Update scale values
+            if (inputUnit === 'feet') {
+                document.getElementById('scaleMinValue').textContent = `Min: ${formatFeet(newMinFocusFeet)}`;
+                if (diopter === 0) {
+                    document.getElementById('scaleMaxValue').textContent = `Max: ∞`;
+                } else {
+                    document.getElementById('scaleMaxValue').textContent = `Max: ${formatFeet(newMaxFocusFeet)}`;
+                }
+            } else {
+                document.getElementById('scaleMinValue').textContent = `Min: ${newMinFocus.toFixed(3)} m`;
+                if (diopter === 0) {
+                    document.getElementById('scaleMaxValue').textContent = `Max: ∞`;
+                } else {
+                    document.getElementById('scaleMaxValue').textContent = `Max: ${newMaxFocus.toFixed(3)} m`;
+                }
+            }
+
+            document.getElementById('results').classList.add('show');
+            
+            // Update lens scale after a brief delay to allow DOM to update
+            setTimeout(updateLensScale, 100);
+        }
+
+        document.getElementById('diopter').addEventListener('input', function() {
+            updateDiopterButtons();
+            calculate();
+        });
+
+        document.getElementById('originalMinFocus').addEventListener('input', function() {
+            calculate();
+        });
+
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    calculate();
+                }
+            });
+        });
+        
+        // Update placeholder based on unit selection
+        function updatePlaceholder() {
+            const input = document.getElementById('originalMinFocus');
+            if (inputUnit === 'feet') {
+                input.placeholder = "Enter distance (e.g., 1'6\" or 1.5)";
+            } else {
+                input.placeholder = "Enter distance (e.g., 1.5m or 0.5)";
+            }
+        }
+        
+        // Wrap setInputUnit to update placeholder
+        const originalSetInputUnit = setInputUnit;
+        setInputUnit = function(unit) {
+            originalSetInputUnit(unit);
+            updatePlaceholder();
+        };
+        
+        // Initial placeholder
+        updatePlaceholder();
+
+        // Update scale on window resize
+        window.addEventListener('resize', function() {
+            if (document.getElementById('results').classList.contains('show')) {
+                updateLensScale();
+            }
+        });
+    </script>
+</body>
+</html>
