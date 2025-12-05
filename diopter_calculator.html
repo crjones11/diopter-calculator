@@ -282,8 +282,10 @@
         .comparison-row {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             padding: 8px 0;
             border-bottom: 1px solid #e0e0e0;
+            gap: 10px;
         }
 
         .comparison-row:last-child {
@@ -295,12 +297,15 @@
             font-weight: 500;
             font-size: 0.85em;
             text-transform: uppercase;
+            flex-shrink: 0;
         }
 
         .comparison-value {
             color: #000000;
             font-weight: 700;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            text-align: right;
+            word-break: break-word;
         }
 
         /* Lens Scale Styles */
@@ -445,6 +450,8 @@
             color: #666666;
             font-size: 0.8em;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            flex-wrap: wrap;
+            gap: 5px;
         }
 
         .error-message {
@@ -463,6 +470,63 @@
             animation: shake 0.4s ease;
         }
 
+        /* Venmo Section */
+        .venmo-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .venmo-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .venmo-qr {
+            flex-shrink: 0;
+        }
+
+        .venmo-qr img {
+            width: 120px;
+            height: 120px;
+            border: 2px solid #e0e0e0;
+            display: block;
+        }
+
+        .venmo-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .venmo-link {
+            color: #dc143c;
+            font-size: 1.2em;
+            font-weight: 700;
+            text-decoration: none;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: opacity 0.3s ease;
+        }
+
+        .venmo-link:hover {
+            opacity: 0.8;
+        }
+
+        .venmo-label {
+            color: #666666;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-10px); }
@@ -470,20 +534,247 @@
         }
 
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
             .container {
-                padding: 20px;
+                padding: 20px 15px;
+                max-width: 100%;
             }
 
             h1 {
-                font-size: 1.5em;
+                font-size: 1.4em;
+                letter-spacing: 1px;
+                margin-bottom: 3px;
+            }
+
+            .subtitle {
+                font-size: 0.75em;
+                margin-bottom: 20px;
+            }
+
+            .input-section {
+                margin-bottom: 20px;
+            }
+
+            .input-group {
+                margin-bottom: 18px;
+            }
+
+            label {
+                font-size: 0.75em;
+                margin-bottom: 6px;
+            }
+
+            .diopter-buttons {
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+
+            .diopter-btn {
+                padding: 8px;
+                font-size: 0.9em;
+                min-width: 60px;
+            }
+
+            input[type="number"],
+            input[type="text"] {
+                padding: 10px 12px;
+                font-size: 0.95em;
+            }
+
+            .unit-toggle {
+                margin-top: 6px;
+                gap: 6px;
+            }
+
+            .unit-btn {
+                padding: 5px 10px;
+                font-size: 0.75em;
+            }
+
+            .results {
+                margin-top: 20px;
+                padding: 15px;
+            }
+
+            .results h2 {
+                font-size: 1em;
+                margin-bottom: 15px;
             }
 
             .result-grid {
                 grid-template-columns: 1fr;
+                gap: 12px;
             }
 
-            .diopter-buttons {
-                flex-direction: column;
+            .result-card {
+                padding: 12px;
+            }
+
+            .result-label {
+                font-size: 0.7em;
+                margin-bottom: 6px;
+            }
+
+            .unit-primary {
+                font-size: 1.4em;
+            }
+
+            .unit-secondary {
+                font-size: 0.8em;
+            }
+
+            .comparison {
+                padding: 12px 10px;
+                margin-top: 15px;
+            }
+
+            .comparison-label {
+                font-size: 0.7em;
+                flex-shrink: 0;
+                min-width: 120px;
+            }
+
+            .comparison-value {
+                font-size: 0.85em;
+                text-align: right;
+                word-break: break-word;
+            }
+
+            .comparison-row {
+                padding: 8px 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+            }
+
+            /* Lens Scale Mobile Adjustments */
+            .lens-scale-container {
+                margin-top: 20px;
+                padding: 12px 10px;
+                overflow-x: auto;
+            }
+
+            .lens-scale-title {
+                font-size: 0.75em;
+                margin-bottom: 8px;
+            }
+
+            .lens-scale {
+                height: 60px;
+                min-width: 100%;
+                width: 100%;
+            }
+
+            .scale-mark-label {
+                font-size: 0.55em;
+                white-space: nowrap;
+            }
+
+            .scale-infinity {
+                font-size: 0.9em;
+                right: 6px;
+            }
+
+            .scale-values {
+                font-size: 0.65em;
+                margin-top: 6px;
+                flex-wrap: wrap;
+            }
+
+            .error-message {
+                padding: 10px;
+                font-size: 0.85em;
+            }
+
+            .venmo-section {
+                margin-top: 30px;
+                padding-top: 20px;
+            }
+
+            .venmo-content {
+                gap: 15px;
+            }
+
+            .venmo-qr {
+                display: none;
+            }
+
+            .venmo-qr {
+                display: none;
+            }
+
+            .venmo-qr img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .venmo-link {
+                font-size: 1em;
+            }
+
+            .venmo-label {
+                font-size: 0.75em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px 12px;
+            }
+
+            h1 {
+                font-size: 1.2em;
+            }
+
+            .unit-primary {
+                font-size: 1.2em;
+            }
+
+            .comparison {
+                padding: 10px 8px;
+            }
+
+            .comparison-label {
+                font-size: 0.65em;
+                min-width: 100px;
+            }
+
+            .comparison-value {
+                font-size: 0.8em;
+            }
+
+            .lens-scale-container {
+                padding: 10px 8px;
+            }
+
+            .lens-scale {
+                height: 50px;
+            }
+
+            .scale-mark-label {
+                font-size: 0.5em;
+            }
+
+            .scale-values {
+                font-size: 0.6em;
+            }
+
+            .venmo-section {
+                margin-top: 25px;
+                padding-top: 15px;
+            }
+
+            .venmo-qr img {
+                width: 90px;
+                height: 90px;
+            }
+
+            .venmo-link {
+                font-size: 0.9em;
             }
         }
     </style>
@@ -491,7 +782,6 @@
 <body>
     <div class="container">
         <h1>🔍 Diopter Calculator</h1>
-        <p class="subtitle">an RTP tool</p>
 
         <div class="input-section">
             <div class="input-group">
@@ -543,10 +833,6 @@
 
             <div class="comparison">
                 <div class="comparison-row">
-                    <span class="comparison-label">Original Min Focus:</span>
-                    <span class="comparison-value" id="originalMinDisplay">-</span>
-                </div>
-                <div class="comparison-row">
                     <span class="comparison-label">New Min Focus:</span>
                     <span class="comparison-value" id="newMinDisplay">-</span>
                 </div>
@@ -567,6 +853,18 @@
                 <div class="scale-values">
                     <span id="scaleMinValue">-</span>
                     <span id="scaleMaxValue">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="venmo-section">
+            <div class="venmo-content">
+                <div class="venmo-qr">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://venmo.com/codyjonescolor" alt="Venmo QR Code" id="venmoQR">
+                </div>
+                <div class="venmo-info">
+                    <a href="https://venmo.com/codyjonescolor" target="_blank" class="venmo-link">@codyjonescolor</a>
+                    <p class="venmo-label">Support this tool</p>
                 </div>
             </div>
         </div>
@@ -946,7 +1244,6 @@
                     : `(${formatFeet(newMaxFocusFeet)})`;
             }
             
-            document.getElementById('originalMinDisplay').textContent = `${originalMinPrimary} ${originalMinSecondary}`;
             document.getElementById('newMinDisplay').textContent = `${newMinPrimary} ${newMinSecondary}`;
             document.getElementById('newMaxDisplay').textContent = `${newMaxPrimary} ${newMaxSecondary}`;
 
