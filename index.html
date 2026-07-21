@@ -11,7 +11,7 @@
             box-sizing: border-box;
         }
 
-        .container {
+        :root {
             --bg:               #ffffff;
             --bg-surface:       #ffffff;
             --bg-input:         #ffffff;
@@ -23,7 +23,37 @@
             --border-light:     #e0e0e0;
             --shadow:           rgba(0, 0, 0, 0.1);
             --chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8' viewBox='0 0 14 8'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%23666666' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        }
 
+        [data-theme="dark"] {
+            --bg:               #121212;
+            --bg-surface:       #1a1a1a;
+            --bg-input:         #1e1e1e;
+            --bg-hover:         #262626;
+            --text:             #f0f0f0;
+            --text-muted:       #a0a0a0;
+            --text-placeholder: #6b6b6b;
+            --border:           #444444;
+            --border-light:     #333333;
+            --shadow:           rgba(0, 0, 0, 0.5);
+            --chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8' viewBox='0 0 14 8'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%23a0a0a0' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        }
+
+        html, body {
+            margin: 0;
+            min-height: 100%;
+            background: var(--bg);
+            transition: background 0.3s ease;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .container {
             margin: 0 auto;
             background: var(--bg);
             border-radius: 0;
@@ -35,6 +65,72 @@
             border: none;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             color: var(--text);
+            transition: background 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--bg-surface);
+            border: 2px solid var(--border-light);
+            border-radius: 999px;
+            cursor: pointer;
+            user-select: none;
+            z-index: 100;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .theme-toggle-track {
+            position: relative;
+            width: 38px;
+            height: 20px;
+            background: var(--border);
+            border-radius: 999px;
+            transition: background 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .theme-toggle-thumb {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: #ffffff;
+            border-radius: 50%;
+            transition: transform 0.25s ease, background 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        [data-theme="dark"] .theme-toggle-thumb {
+            transform: translateX(18px);
+            background: #dc143c;
+        }
+
+        .theme-toggle-label {
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 480px) {
+            .theme-toggle {
+                top: 12px;
+                left: 12px;
+                padding: 6px 10px;
+            }
+            .theme-toggle-label { display: none; }
         }
 
         @keyframes fadeIn {
@@ -333,15 +429,6 @@
             flex-wrap: wrap;
         }
 
-        .venmo-qr { flex-shrink: 0; }
-
-        .venmo-qr img {
-            width: 120px;
-            height: 120px;
-            border: 2px solid var(--border-light);
-            display: block;
-        }
-
         .venmo-info {
             display: flex;
             flex-direction: column;
@@ -421,8 +508,6 @@
 
             .venmo-section  { margin-top: 30px; padding-top: 20px; }
             .venmo-content  { gap: 15px; }
-            .venmo-qr       { display: none; }
-            .venmo-qr img   { width: 100px; height: 100px; }
             .venmo-link     { font-size: 1em; }
             .venmo-label    { font-size: 0.75em; }
         }
@@ -432,12 +517,18 @@
             .container h1   { font-size: 1.2em; }
             .unit-primary   { font-size: 1.2em; }
             .venmo-section  { margin-top: 25px; padding-top: 15px; }
-            .venmo-qr img   { width: 90px; height: 90px; }
             .venmo-link     { font-size: 0.9em; }
         }
     </style>
 </head>
 <body>
+    <div class="theme-toggle" id="themeToggle" role="button" aria-label="Toggle dark mode" tabindex="0">
+        <div class="theme-toggle-track">
+            <div class="theme-toggle-thumb"></div>
+        </div>
+        <span class="theme-toggle-label" id="themeToggleLabel">Dark</span>
+    </div>
+
     <div class="container">
         <h1>🔍 Diopter Calculator</h1>
 
@@ -541,9 +632,6 @@
 
         <div class="venmo-section">
             <div class="venmo-content">
-                <div class="venmo-qr">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://venmo.com/codyjonescolor" alt="Venmo QR Code" id="venmoQR">
-                </div>
                 <div class="venmo-info">
                     <a href="https://venmo.com/codyjonescolor" target="_blank" class="venmo-link">@codyjonescolor</a>
                     <p class="venmo-label">Support this tool</p>
@@ -554,6 +642,52 @@
     </div>
 
     <script>
+        // ---- Dark mode toggle ----
+        // Defaults to dark for first-time visitors; remembers choice after that.
+        (function () {
+            const root = document.documentElement;
+            const toggle = document.getElementById('themeToggle');
+            const label = document.getElementById('themeToggleLabel');
+
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    root.setAttribute('data-theme', 'dark');
+                } else {
+                    root.removeAttribute('data-theme');
+                }
+                label.textContent = theme === 'dark' ? 'Dark' : 'Light';
+            }
+
+            let saved;
+            try {
+                saved = localStorage.getItem('diopterTheme');
+            } catch (e) {
+                saved = null;
+            }
+            const initialTheme = saved === 'light' ? 'light' : 'dark'; // default: dark
+            applyTheme(initialTheme);
+
+            function toggleTheme() {
+                const isDark = root.getAttribute('data-theme') === 'dark';
+                const next = isDark ? 'light' : 'dark';
+                applyTheme(next);
+                try {
+                    localStorage.setItem('diopterTheme', next);
+                } catch (e) {
+                    // ignore if storage is unavailable
+                }
+            }
+
+            toggle.addEventListener('click', toggleTheme);
+            toggle.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleTheme();
+                }
+            });
+        })();
+        // ---------------------------
+
         let inputUnit = 'meters';
         const METERS_TO_FEET = 3.28084;
         let originalMinFocus = 0;
